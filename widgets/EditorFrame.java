@@ -16,6 +16,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
@@ -27,6 +28,32 @@ import figures.creationListeners.AbstractCreationListener;
 import figures.enums.FigureType;
 import figures.enums.LineType;
 import figures.enums.PaintToType;
+
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JToolBar;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+
+import java.awt.Component;
+
+import javax.swing.Box;
+
+import java.awt.Dimension;
+
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JScrollPane;
+
+import java.awt.event.ActionListener;
 
 /**
  * Fenêtre principale de l'application
@@ -205,6 +232,8 @@ public class EditorFrame extends JFrame
 	 * de menu about
 	 */
 	private final Action aboutAction = new AboutAction();
+	private JLabeledComboBox labeledComboBox;
+	private final JLabel lblNewLabel = new JLabel("coordLabel");
 
 	/**
 	 * Constructeur de la fenètre de l'éditeur.
@@ -214,8 +243,138 @@ public class EditorFrame extends JFrame
 	 */
 	public EditorFrame() throws HeadlessException
 	{
+		setResizable(false);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("Drawing");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("Undo");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent undoActionEvent) {
+			}
+		});
+		mntmNewMenuItem.setAction(undoAction);
+		mnNewMenu.add(mntmNewMenuItem);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Clear");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent cleaActionEvent) {
+			}
+		});
+		mntmNewMenuItem_1.setAction(clearAction);
+		mnNewMenu.add(mntmNewMenuItem_1);
+		
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Quit");
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent quiActionEvent) {
+			}
+		});
+		mntmNewMenuItem_2.setAction(quitAction);
+		mnNewMenu.add(mntmNewMenuItem_2);
+		
+		JMenu mnNewMenu_1 = new JMenu("Help");
+		menuBar.add(mnNewMenu_1);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("About");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent aboutActionEvent) {
+			}
+		});
+		mntmNewMenuItem_3.setAction(aboutAction);
+		mnNewMenu_1.add(mntmNewMenuItem_3);
+		getContentPane().setLayout(new BorderLayout(0, 0));
+		
+		JToolBar toolBar = new JToolBar();
+		getContentPane().add(toolBar, BorderLayout.NORTH);
+		
+		JButton btnNewButton = new JButton("Undo");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent undoActionEvent) {
+			}
+		});
+		btnNewButton.setAction(undoAction);
+		toolBar.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Clear");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent clearActionEvent) {
+			}
+		});
+		btnNewButton_1.setAction(clearAction);
+		toolBar.add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("About");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent aboutActionEvent) {
+			}
+		});
+		btnNewButton_2.setAction(aboutAction);
+		toolBar.add(btnNewButton_2);
+		
+		Component horizontalGlue = Box.createHorizontalGlue();
+		toolBar.add(horizontalGlue);
+		
+		JButton btnNewButton_3 = new JButton("Quit");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent quitActionEvent) {
+			}
+		});
+		btnNewButton_3.setAction(quitAction);
+		toolBar.add(btnNewButton_3);
+		
+		JPanel panel = new JPanel();
+		getContentPane().add(panel, BorderLayout.WEST);
+		
+		labeledComboBox = new JLabeledComboBox("Shape", 
+				       							new String[] {"Circle", "Ellipse", "Rectangle", "Rounded Rectangle", "Polygon"},
+												0, new ShapeItemListener());
+		panel.add(labeledComboBox);
+		
+		JLabeledComboBox labeledComboBox_1 = new JLabeledComboBox("FillColor", fillColorNames, 0, (ItemListener) null);
+		panel.add(labeledComboBox_1);
+		
+		JLabeledComboBox labeledComboBox_2 = new JLabeledComboBox("Edge Color", edgeColorNames, 0, (ItemListener) null);
+		panel.add(labeledComboBox_2);
+		
+		JLabeledComboBox labeledComboBox_3 = new JLabeledComboBox("Line Type", LineType.stringValues() , 0, (ItemListener) null);
+		panel.add(labeledComboBox_3);
+		
+		JPanel panel_2 = new JPanel();
+		panel.add(panel_2);
+		
+		JLabel lblNewLabel_2 = new JLabel("Width");
+		panel_2.add(lblNewLabel_2);
+		
+		JSpinner spinner = new JSpinner();
+		spinner.setModel(new SpinnerNumberModel(defaultEdgeWidth, minEdgeWidth, maxEdgeWidth, stepEdgeWidth));
+		panel_2.add(spinner);
+		spinner.setName("");
+		
+		InfoPanel infoPanel = new InfoPanel();
+		panel.add(infoPanel);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		getContentPane().add(scrollPane, BorderLayout.EAST);
+		
+		DrawingPanel drawingPanel_1 = new DrawingPanel((Drawing) null, (JLabel) null, (InfoPanel) null);
+		getContentPane().add(drawingPanel_1, BorderLayout.CENTER);
+		
+		JPanel panel_1 = new JPanel();
+		getContentPane().add(panel_1, BorderLayout.SOUTH);
+		
+		JLabel lblNewLabel_1 = new JLabel("tipLabel");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.LEFT);
+		panel_1.add(lblNewLabel_1);
+		
+		Component horizontalGlue_1 = Box.createHorizontalGlue();
+		horizontalGlue_1.setPreferredSize(new Dimension(600, 10));
+		panel_1.add(horizontalGlue_1);
+		panel_1.add(lblNewLabel);
 		/*
-		 * TODO Construire l'interface graphique en utilisant WindowBuilder:
+		 * Construire l'interface graphique en utilisant WindowBuilder:
 		 * Menu Contextuel -> Open With -> WindowBuilder Editor puis
 		 * aller dans l'onglet Design
 		 */
@@ -225,7 +384,7 @@ public class EditorFrame extends JFrame
 		 */
 
 		/*
-		 * TODO mettez en place un BorderLayout qui permettra d'arranger
+		 * mettez en place un BorderLayout qui permettra d'arranger
 		 * les wigdets
 		 */
 
@@ -234,7 +393,7 @@ public class EditorFrame extends JFrame
 		// --------------------------------------------------------------------
 
 		/*
-		 * TODO Créer la barre d'outils en haut (qui n'en est pas une)
+		 * Créer la barre d'outils en haut (qui n'en est pas une)
 		 * et ajoutez 3 boutons
 		 * 	- Undo auquel vous attacherez l'action undoAction
 		 * 	- Clear auquel vous attacherez l'action clearAction
@@ -247,7 +406,7 @@ public class EditorFrame extends JFrame
 		// --------------------------------------------------------------------
 
 		/*
-		 * TODO Créez le panel en bas et ajoutez
+		 * Créez le panel en bas et ajoutez
 		 * 	- le tipLabel dans lequel afficher les conseils utilisateurs lors
 		 * 		de la création d'une nouvelle figure
 		 * 	- un springer
@@ -259,7 +418,7 @@ public class EditorFrame extends JFrame
 		// --------------------------------------------------------------------
 
 		/*
-		 * TODO Créez le panel à gauche et ajoutez y
+		 * Créez le panel à gauche et ajoutez y
 		 * 	- le JLabeledComboBox du choix du type de figure à créer
 		 * 	- le JLabeledComboBox du choix de la couleur de remplissage
 		 * 	- le JLabeledComboBox du choix de la couleur de trait
@@ -291,7 +450,7 @@ public class EditorFrame extends JFrame
 		// --------------------------------------------------------------------
 
 		/*
-		 * TODO Créez une barre de menus (JMenuBar) dans laquelle vous ajouterez
+		 * Créez une barre de menus (JMenuBar) dans laquelle vous ajouterez
 		 * 	- Un JMenu Drawing contenant
 		 * 		- un JMenuItem "Cancel" auquel vous attacherez l'action undoAction
 		 * 		- un JMenuItem "Clear" auquel vous attacherez l'action clearAction
@@ -356,8 +515,9 @@ public class EditorFrame extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			System.exit(0);
 			/*
-			 * TODO Action à effectuer lorsque l'action "undo" est cliquée :
+			 * Action à effectuer lorsque l'action "undo" est cliquée :
 			 * sortir avec un System.exit() (pas très propre, mais fonctionne)
 			 */
 		}
@@ -401,9 +561,10 @@ public class EditorFrame extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
 			/*
-			 * TODO Action à effectuer lorsque l'action "undo" est cliquée :
+			 * Action à effectuer lorsque l'action "undo" est cliquée :
 			 * retirer la dernière figure dessinée dans drawingModel
 			 */
+			drawingModel.removeLastFigure();
 		}
 	}
 
@@ -443,9 +604,10 @@ public class EditorFrame extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
 			/*
-			 * TODO Action à effectuer lorsque l'action "clear" est cliquée :
+			 * Action à effectuer lorsque l'action "clear" est cliquée :
 			 * Effacer toutes les figures du drawingModel
 			 */
+			drawingModel.clear();
 		}
 	}
 
@@ -477,10 +639,12 @@ public class EditorFrame extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
 			/*
-			 * TODO Action à effectuer lorsque l'action "about" est cliquée :
+			 * Action à effectuer lorsque l'action "about" est cliquée :
 			 * Ouvrir un MessageDialog (JOptionPane.showMessageDialog(...)) de
 			 * type JOptionPane.INFORMATION_MESSAGE
 			 */
+			JOptionPane.showMessageDialog(null, "ABOUT", "ABOUT", JOptionPane.INFORMATION_MESSAGE);
+			
 		}
 	}
 
@@ -503,18 +667,20 @@ public class EditorFrame extends JFrame
 		public ShapeItemListener(FigureType type)
 		{
 			/*
-			 * TODO Mise en place du type de figure dans drawingModel
+			 * Mise en place du type de figure dans drawingModel
 			 */
-
+			drawingModel.setType(type);
 			/*
-			 * TODO obtention d'un XXXCreationLsitener avec
+			 * obtention d'un XXXCreationLsitener avec
 			 * creationListener = type.getCreationListener(...)
 			 * (voir l'enum FigureType)
 			 */
+			creationListener = type.getCreationListener(drawingModel, tipLabel);
 
 			/*
-			 * TODO ajout de ce creationListener au drawinPanel
+			 * ajout de ce creationListener au drawinPanel
 			 */
+			drawingPanel.addCreationListener(creationListener);
 		}
 
 		@Override
@@ -528,9 +694,10 @@ public class EditorFrame extends JFrame
 			{
 				case ItemEvent.SELECTED:
 					/*
-					 * TODO Mise en place d'un nouveau type de figure dans
+					 * Mise en place d'un nouveau type de figure dans
 					 * drawingModel
 					 */
+					drawingModel.setType(figureType);
 
 					/*
 					 * TODO Mise en place d'un nouveau type de creationListener
@@ -681,8 +848,9 @@ public class EditorFrame extends JFrame
 		public EdgeTypeListener(LineType type)
 		{
 			/*
-			 * TODO Mise en place du type de trait dans drawingModel
+			 * Mise en place du type de trait dans drawingModel
 			 */
+			drawingModel.setEdgeType(type);
 		}
 
 		@Override
@@ -716,8 +884,9 @@ public class EditorFrame extends JFrame
 		public EdgeWidthListener(int initialValue)
 		{
 			/*
-			 * TODO Mise en place de l'épaisseur de trait dans drawingModel
+			 * Mise en place de l'épaisseur de trait dans drawingModel
 			 */
+			drawingModel.setEdgeWidth((float) initialValue);
 		}
 
 		/**

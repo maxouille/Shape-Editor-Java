@@ -265,8 +265,7 @@ public class Drawing extends Observable implements Iterable<AbstractFigure>
 	 */
 	public void removeLastFigure()
 	{
-		int ind = figures.indexOf(figures.lastElement());
-		figures.remove(ind);
+		figures.remove(figures.size()-1);
 	}
 
 	/**
@@ -294,6 +293,6 @@ public class Drawing extends Observable implements Iterable<AbstractFigure>
 	 */
 	public ListIterator<AbstractFigure> reverseIterator()
 	{
-		return figures.listIterator((figures.indexOf(figures.lastElement()))-1);
+		return figures.listIterator(figures.size()-1);
 	}
 }

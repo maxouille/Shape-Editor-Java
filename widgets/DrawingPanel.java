@@ -1,6 +1,7 @@
 package widgets;
 
 import java.awt.Color;
+
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -19,6 +20,8 @@ import java.util.Observer;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import java.util.ListIterator;
 
 import figures.AbstractFigure;
 import figures.Drawing;
@@ -40,12 +43,16 @@ import figures.creationListeners.AbstractCreationListener;
  * pour traduire les évènements souris en instructions pour le modèle de dessin
  * lors de la création d'une nouvelle figure.
  * </dl>
- *
+ * 
  * @author davidroussel
  */
 public class DrawingPanel extends JPanel implements Observer, MouseListener,
-		MouseMotionListener
-{
+		MouseMotionListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Taille effective du panel. Ce panel n'ayant pas de Layout Manager, il est
 	 * important de conserver une taille effective qui puisse être renvoyée dans
@@ -59,17 +66,15 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 	 * Contrôleur de changement de taille afin de mettre à jour
 	 * {@link DrawingPanel#size} utilisé dans
 	 * {@link DrawingPanel#getPreferredSize()}.
-	 *
+	 * 
 	 * @author davidroussel
 	 */
-	protected class ResizeListener extends ComponentAdapter
-	{
+	protected class ResizeListener extends ComponentAdapter {
 		/**
 		 * Action à réaliser lorsque le composant change de taille
 		 */
 		@Override
-		public void componentResized(ComponentEvent e)
-		{
+		public void componentResized(ComponentEvent e) {
 			size = e.getComponent().getSize();
 		}
 	}
@@ -113,16 +118,18 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 
 	/**
 	 * Constructeur de la zone de dessin à partir d'un modèle de dessin.
-	 *
-	 * @param drawing le modèle de dessin
-	 * @param coordLabel le label à mettre à jour avec les coordonnées du
-	 *            curseur de la souris
-	 * @param infoLabel le panneau d'information des figures à mettre à jour
-	 *            avec les informations relative à la figure située sous le
-	 *            curseur de la souris
+	 * 
+	 * @param drawing
+	 *            le modèle de dessin
+	 * @param coordLabel
+	 *            le label à mettre à jour avec les coordonnées du curseur de la
+	 *            souris
+	 * @param infoLabel
+	 *            le panneau d'information des figures à mettre à jour avec les
+	 *            informations relative à la figure située sous le curseur de la
+	 *            souris
 	 */
-	public DrawingPanel(Drawing drawing, JLabel coordLabel, InfoPanel infoPanel)
-	{
+	public DrawingPanel(Drawing drawing, JLabel coordLabel, InfoPanel infoPanel) {
 		setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		size = new Dimension(800, 600);
 		setPreferredSize(size);
@@ -133,34 +140,25 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 		setDoubleBuffered(true);
 
 		drawingModel = drawing;
-		if (drawing != null)
-		{
+		if (drawing != null) {
 			drawingModel.addObserver(this);
-		}
-		else
-		{
+		} else {
 			System.err.println("DrawingPanel caution: null drawing");
 		}
 
 		this.coordLabel = coordLabel;
 
-		if (this.coordLabel != null)
-		{
+		if (this.coordLabel != null) {
 			this.coordLabel.setText(defaultCoordString);
-		}
-		else
-		{
+		} else {
 			System.err.println("DrawingPanel : null coordLabel");
 		}
 
 		this.infoPanel = infoPanel;
 
-		if (this.infoPanel != null)
-		{
+		if (this.infoPanel != null) {
 			this.infoPanel.resetLabels();
-		}
-		else
-		{
+		} else {
 			System.err.println("DrawingPanel : null infoPanel");
 		}
 
@@ -173,34 +171,31 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 	 * agrandi (avec la fenêtre dans lequel il est par exemple). Cette méthode
 	 * permet d'ajuster les scrollbars d'un container qui contiendrait ce panel
 	 * lorsque la taille de celui-ci change.
-	 *
+	 * 
 	 * @return la taille effective du panel de dessin
 	 * @see javax.swing.JComponent#getPreferredSize()
 	 */
 	@Override
-	public Dimension getPreferredSize()
-	{
+	public Dimension getPreferredSize() {
 		return size;
 	}
 
 	/**
 	 * Mise en place du modèle de dessin. Met en place un nouveau modèle et s'il
 	 * est non null ajoute ce panel comme observateur du modèle
-	 *
-	 * @param drawing le modèle de dessin à mettre en place
+	 * 
+	 * @param drawing
+	 *            le modèle de dessin à mettre en place
 	 */
-	public void setDrawing(Drawing drawing)
-	{
+	public void setDrawing(Drawing drawing) {
 		// retrait du précédent modèle de dessin (s'il existe)
-		if (drawingModel != null)
-		{
+		if (drawingModel != null) {
 			drawingModel.deleteObserver(this);
 		}
 
 		// Mise en place du nouveau modèle de dessin
 		drawingModel = drawing;
-		if (drawingModel != null)
-		{
+		if (drawingModel != null) {
 			drawingModel.addObserver(this);
 		}
 	}
@@ -208,34 +203,35 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 	/**
 	 * Mise en place du label dans lequel afficher les coordonnées du pointeur
 	 * de la souris.
-	 *
-	 * @param coordLabel le label dans lequel afficher les coordonnées du
-	 *            pointeur de la souris.
+	 * 
+	 * @param coordLabel
+	 *            le label dans lequel afficher les coordonnées du pointeur de
+	 *            la souris.
 	 */
-	public void setCoordLabel(JLabel coordLabel)
-	{
+	public void setCoordLabel(JLabel coordLabel) {
 		this.coordLabel = coordLabel;
 	}
 
 	/**
 	 * Mise en place du panel d'information dans lequel afficher les infos sur
 	 * la figure située sous le curseur
-	 *
-	 * @param infoPanel l'{@link InfoPanel} à mettre en place
+	 * 
+	 * @param infoPanel
+	 *            l'{@link InfoPanel} à mettre en place
 	 */
-	public void setInfoPanel(InfoPanel infoPanel)
-	{
+	public void setInfoPanel(InfoPanel infoPanel) {
 		this.infoPanel = infoPanel;
 	}
 
 	/**
 	 * Dessin du panel. Effacement ce celui-ci puis dessin des figures.
-	 * @param g le contexte graphique
+	 * 
+	 * @param g
+	 *            le contexte graphique
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
 	@Override
-	protected void paintComponent(Graphics g)
-	{
+	protected void paintComponent(Graphics g) {
 		super.paintComponent(g); // Inutile
 
 		// caractéristiques graphiques : mise en place de l'antialiasing
@@ -250,10 +246,8 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 		g2D.fillRect(0, 0, d.width, d.height);
 
 		// Puis on dessine l'ensemble des figures
-		if (drawingModel != null)
-		{
-			for (AbstractFigure f : drawingModel)
-			{
+		if (drawingModel != null) {
+			for (AbstractFigure f : drawingModel) {
 				f.draw(g2D);
 			}
 		}
@@ -261,32 +255,28 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 
 	/**
 	 * Mise en place d'un nouveau creationListener
-	 *
-	 * @param cl le nouveau creationListener
+	 * 
+	 * @param cl
+	 *            le nouveau creationListener
 	 */
-	public void addCreationListener(AbstractCreationListener cl)
-	{
-		if (cl != null)
-		{
+	public void addCreationListener(AbstractCreationListener cl) {
+		if (cl != null) {
 			addMouseListener(cl);
 			addMouseMotionListener(cl);
 			// System.out.println("CreationListener " + cl + " added");
-		}
-		else
-		{
+		} else {
 			System.err.println("DrawingPanel.setCreationListener(null)");
 		}
 	}
 
 	/**
 	 * Retrait d'un creationListenener
-	 *
-	 * @param cl le creationListener à retirer
+	 * 
+	 * @param cl
+	 *            le creationListener à retirer
 	 */
-	public void removeCreationListener(AbstractCreationListener cl)
-	{
-		if (cl != null)
-		{
+	public void removeCreationListener(AbstractCreationListener cl) {
+		if (cl != null) {
 			removeMouseListener(cl);
 			removeMouseMotionListener(cl);
 			// System.out.println("CreationListener " + cl + " removed");
@@ -297,16 +287,16 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 	 * Mise à jour déclenchée par un {@link Observable#notifyObservers()} : en
 	 * l'occurence le modèle de dessin ({@link Drawing}) lorsque celui ci est
 	 * modifié. Cette mise à jour déclenche une requête de redessin du panel.
-	 *
-	 * @param observable l'observable ayant déclenché cette MAJ
-	 * @param data les données (evt) transmises par l'observable
+	 * 
+	 * @param observable
+	 *            l'observable ayant déclenché cette MAJ
+	 * @param data
+	 *            les données (evt) transmises par l'observable
 	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
 	@Override
-	public void update(Observable observable, Object data)
-	{
-		if (observable instanceof Drawing)
-		{
+	public void update(Observable observable, Object data) {
+		if (observable instanceof Drawing) {
 			// Le modèle à changé il faut redessiner les figures
 			repaint();
 		}
@@ -315,12 +305,12 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 	/**
 	 * Rafraichissement des panneaux d'information lors du déplacement de la
 	 * souris
-	 *
-	 * @param e l'évènement souris associé
+	 * 
+	 * @param e
+	 *            l'évènement souris associé
 	 */
 	@Override
-	public void mouseDragged(MouseEvent e)
-	{
+	public void mouseDragged(MouseEvent e) {
 		// Déplacement de la souris (btn enfoncé) : MAJ des coordonnées
 		// de la souris dans le coordLabel et infoPanel
 		refreshCoordLabel(e.getPoint());
@@ -330,12 +320,12 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 	/**
 	 * Rafraichissement des panneaux d'information lors du déplacement (bouton
 	 * enfoncé) de la souris
-	 *
-	 * @param e l'évènement souris associé
+	 * 
+	 * @param e
+	 *            l'évènement souris associé
 	 */
 	@Override
-	public void mouseMoved(MouseEvent e)
-	{
+	public void mouseMoved(MouseEvent e) {
 		// Déplacement de la souris : MAJ des coordonnées
 		// de la souris dans le coordLabel et infoPanel
 		refreshCoordLabel(e.getPoint());
@@ -343,20 +333,19 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e)
-	{
+	public void mouseClicked(MouseEvent e) {
 		// Rien
 	}
 
 	/**
 	 * Reprise du rafraichissement des panneaux d'information lorsque la souris
 	 * rentre dans ce panel.
-	 *
-	 * @param e l'évènement souris associé
+	 * 
+	 * @param e
+	 *            l'évènement souris associé
 	 */
 	@Override
-	public void mouseEntered(MouseEvent e)
-	{
+	public void mouseEntered(MouseEvent e) {
 		sendInfoState = true;
 		refreshCoordLabel(e.getPoint());
 		refreshInfoPanel(e.getPoint());
@@ -365,12 +354,12 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 	/**
 	 * Arrêt du rafraichissement des panneaux d'information et effacement de ces
 	 * panneaux lorsque la souris sort du panel.
-	 *
-	 * @param e l'évènement souris associé
+	 * 
+	 * @param e
+	 *            l'évènement souris associé
 	 */
 	@Override
-	public void mouseExited(MouseEvent e)
-	{
+	public void mouseExited(MouseEvent e) {
 		// Rien si ce n'est de remettre les coordonnés dans la barre d'état
 		// à x = ___ y = ___ et effacer l'infoPanel
 		sendInfoState = false;
@@ -379,14 +368,12 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e)
-	{
+	public void mousePressed(MouseEvent e) {
 		// Rien
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e)
-	{
+	public void mouseReleased(MouseEvent e) {
 		// Rien
 	}
 
@@ -394,34 +381,48 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 	 * Rafraichissement du {@link #coordLabel} (s'il est non null) avec de
 	 * nouvelles coordonnées ou bien avec la {@link #defaultCoordString} si l'on
 	 * affiche pas les coordonnées
-	 *
-	 * @param x l'abcisse des coordonnées à afficher
-	 * @param y l'ordonnée des coordonnées à afficher
+	 * 
+	 * @param x
+	 *            l'abcisse des coordonnées à afficher
+	 * @param y
+	 *            l'ordonnée des coordonnées à afficher
 	 */
-	private void refreshCoordLabel(Point p)
-	{
+	private void refreshCoordLabel(Point p) {
 		/*
-		 * TODO remplissage du ccordLabel si sendInfoState est vrai
-		 * avec les coordonées du point p en utilisant le coordFormat pour
-		 * formatter les nombres : String chaine = coordFormat.format(nombre)
-		 * Sinon mettre le defaultCoordString dans le label
+		 * remplissage du ccordLabel si sendInfoState est vrai avec les
+		 * coordonées du point p en utilisant le coordFormat pour formatter les
+		 * nombres : String chaine = coordFormat.format(nombre) Sinon mettre le
+		 * defaultCoordString dans le label
 		 */
+		if (sendInfoState) {
+			this.coordLabel.setText("x: " + coordFormat.format(p.x) + "; y: "
+					+ coordFormat.format(p.y));
+		} else {
+			this.coordLabel.setText(defaultCoordString);
+		}
 	}
 
 	/**
 	 * Rafraichissement du panneau d'information {@link #infoPanel}
-	 *
-	 * @param p la position du curseur pour déclencher la recherche de figures
+	 * 
+	 * @param p
+	 *            la position du curseur pour déclencher la recherche de figures
 	 *            sous ce curseur
 	 * @see DrawingModel#getFigureAt(Point2D)
 	 * @see InfoPanel#updateLabels(...)
 	 * @see InfoPanel#resetLabels()
 	 */
-	private void refreshInfoPanel(Point2D p)
-	{
+	private void refreshInfoPanel(Point2D p) {
 		/*
-		 * TODO remplissage de l'infoPanel avec les infos en provenance de
-		 * la figure sous le point p (s'il y en a une) si senInfoState est vrai
+		 * remplissage de l'infoPanel avec les infos en provenance de la figure
+		 * sous le point p (s'il y en a une) si senInfoState est vrai
 		 */
+		for (ListIterator<AbstractFigure> it = drawingModel.reverseIterator(); it.hasPrevious();) {
+			AbstractFigure f = it.previous();
+			if (f.contains(p)) {
+				infoPanel.updateLabels(f.getName(), f.getBounds2D(),f.getCenter());
+				break;
+			}
+		}
 	}
 }
