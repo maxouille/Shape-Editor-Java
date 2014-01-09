@@ -34,6 +34,11 @@ import javax.swing.border.SoftBevelBorder;
 public class InfoPanel extends JPanel
 {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Une chaine vide pour remplir les champs lorsque la souris n'est au dessus
 	 * d'aucune figure
 	 */

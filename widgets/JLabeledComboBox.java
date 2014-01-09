@@ -21,6 +21,11 @@ import javax.swing.SwingConstants;
  */
 public class JLabeledComboBox extends JPanel
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/** Le titre de cette liste */
 	private String title;
 
@@ -34,6 +39,7 @@ public class JLabeledComboBox extends JPanel
 	 * La combobox utilisée à l'intérieur pour pouvoir à ajouter des listener
 	 * par la suite
 	 */
+	@SuppressWarnings("rawtypes")
 	private JComboBox combobox;
 
 	/**

@@ -7,7 +7,11 @@ import java.awt.geom.Point2D;
 import javax.swing.JLabel;
 
 import figures.AbstractFigure;
+import figures.Circle;
 import figures.Drawing;
+import figures.Ellipse;
+import figures.Rectangle;
+import figures.RoundedRectangle;
 import figures.creationListeners.AbstractCreationListener;
 
 /**
@@ -41,30 +45,15 @@ public enum FigureType
 		switch (this)
 		{
 			case CIRCLE:
-				/*
-				 * TODO remplacer par return new Circle(...);
-				 */
-				return null;
+				return new Circle(stroke, edge, fill, , p);
 			case ELLIPSE:
-				/*
-				 * TODO remplacer par return new Ellipse(...);
-				 */
-				return null;
+				return new Ellipse(stroke, edge, fill, p, w, h);
 			case RECTANGLE:
-				/*
-				 * TODO remplacer par return new Rectangle(...);
-				 */
-				return null;
+				return new Rectangle(stroke, edge, fill, p, y);
 			case ROUNDED_RECTANGLE:
-				/*
-				 * TODO remplacer par return new RoundedRectangle(...);
-				 */
-				return null;
+				return new RoundedRectangle(stroke, edge, fill, x, y);
 			case POLYGON:
-				/*
-				 * TODO remplacer par return new Polygon(...);
-				 */
-				return null;
+				return ;
 		}
 
 		throw new AssertionError("FigureType unknown assertion: " + this);
@@ -87,6 +76,7 @@ public enum FigureType
 			case CIRCLE:
 			case ELLIPSE:
 			case RECTANGLE:
+				return new RectS
 				/*
 				 * TODO remplacer par return new
 				 * RectShapeCreationListener(model, tipLabel)

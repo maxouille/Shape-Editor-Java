@@ -58,6 +58,7 @@ public abstract class AbstractFigure
 		this.edge = edge;
 		this.fill = fill;
 		shape = null;
+		instanceNumber++;
 	}
 
 	/**

@@ -328,24 +328,32 @@ public class EditorFrame extends JFrame
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.WEST);
 		
+		Box verticalBox = Box.createVerticalBox();
+		panel.add(verticalBox);
+		
 		labeledComboBox = new JLabeledComboBox("Shape", 
 				       							new String[] {"Circle", "Ellipse", "Rectangle", "Rounded Rectangle", "Polygon"},
-												0, new ShapeItemListener());
-		panel.add(labeledComboBox);
+												0, (ItemListener) null);
+		labeledComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		verticalBox.add(labeledComboBox);
 		
 		JLabeledComboBox labeledComboBox_1 = new JLabeledComboBox("FillColor", fillColorNames, 0, (ItemListener) null);
-		panel.add(labeledComboBox_1);
+		labeledComboBox_1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		verticalBox.add(labeledComboBox_1);
 		
 		JLabeledComboBox labeledComboBox_2 = new JLabeledComboBox("Edge Color", edgeColorNames, 0, (ItemListener) null);
-		panel.add(labeledComboBox_2);
+		labeledComboBox_2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		verticalBox.add(labeledComboBox_2);
 		
 		JLabeledComboBox labeledComboBox_3 = new JLabeledComboBox("Line Type", LineType.stringValues() , 0, (ItemListener) null);
-		panel.add(labeledComboBox_3);
+		labeledComboBox_3.setAlignmentX(Component.CENTER_ALIGNMENT);
+		verticalBox.add(labeledComboBox_3);
 		
 		JPanel panel_2 = new JPanel();
-		panel.add(panel_2);
+		verticalBox.add(panel_2);
 		
 		JLabel lblNewLabel_2 = new JLabel("Width");
+		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel_2.add(lblNewLabel_2);
 		
 		JSpinner spinner = new JSpinner();
@@ -354,13 +362,8 @@ public class EditorFrame extends JFrame
 		spinner.setName("");
 		
 		InfoPanel infoPanel = new InfoPanel();
-		panel.add(infoPanel);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		getContentPane().add(scrollPane, BorderLayout.EAST);
-		
-		DrawingPanel drawingPanel_1 = new DrawingPanel((Drawing) null, (JLabel) null, (InfoPanel) null);
-		getContentPane().add(drawingPanel_1, BorderLayout.CENTER);
+		infoPanel.setPreferredSize(new Dimension(170, 130));
+		verticalBox.add(infoPanel);
 		
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.SOUTH);
@@ -373,6 +376,12 @@ public class EditorFrame extends JFrame
 		horizontalGlue_1.setPreferredSize(new Dimension(600, 10));
 		panel_1.add(horizontalGlue_1);
 		panel_1.add(lblNewLabel);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		
+		DrawingPanel drawingPanel_1 = new DrawingPanel((Drawing) null, (JLabel) null, (InfoPanel) null);
+		scrollPane.setViewportView(drawingPanel_1);
 		/*
 		 * Construire l'interface graphique en utilisant WindowBuilder:
 		 * Menu Contextuel -> Open With -> WindowBuilder Editor puis
@@ -439,7 +448,7 @@ public class EditorFrame extends JFrame
 		// --------------------------------------------------------------------
 
 		/*
-		 * TODO Créez la zone de dessin au centre
+		 * Créez la zone de dessin au centre
 		 * 	- un JScrollPane dans lequel on placera
 		 * 		- le DrawinPanel drawingPanel en lui fournissant le coordLabel
 		 * 		et l'infoPanel afin qu'il puisse y afficher des informations
@@ -483,6 +492,11 @@ public class EditorFrame extends JFrame
 	 */
 	private class QuitAction extends AbstractAction
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		/**
 		 * Constructeur de l'action pour quitter l'application.
 		 * Met en place le raccourci clavier, l'icône et la description
@@ -528,6 +542,12 @@ public class EditorFrame extends JFrame
 	 */
 	private class UndoAction extends AbstractAction
 	{
+		private static final long _1L = 1L;
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = _1L;
+
 		/**
 		 * Constructeur de l'action effacer la dernière figure du dessin
 		 * Met en place le raccourci clavier, l'icône et la description
@@ -574,6 +594,11 @@ public class EditorFrame extends JFrame
 	private class ClearAction extends AbstractAction
 	{
 		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		/**
 		 * Constructeur de l'action pour effacer toutes les figures du dessin
 		 * Met en place le raccourci clavier, l'icône et la description
 		 * de l'action
@@ -616,6 +641,11 @@ public class EditorFrame extends JFrame
 	 */
 	private class AboutAction extends AbstractAction
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		/**
 		 * Constructeur de l'action pour afficher la boite de dialogue
 		 * "A propos ..." Met en place le raccourci clavier, l'icône et la

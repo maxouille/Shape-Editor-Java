@@ -50,6 +50,10 @@ import javax.swing.JFrame;
 
 public class ShapesDemo2D extends JApplet
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	final static int maxCharHeight = 15;
 	final static int minFontSize = 6;
 
