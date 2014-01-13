@@ -17,6 +17,10 @@ public class RoundedRectangleShapeListener extends AbstractCreationListener {
 	public RoundedRectangleShapeListener(Drawing model, JLabel infoLabel,
 			int nbSteps) {
 		super(model, infoLabel, nbSteps);
+		tips[0] = "Bouton Gauche + drag pour commencer la figure";
+		tips[1] = "Relacher le bouton pour finir la figure";
+		tips[2] = "Bouton Droit pour créer l'arrondi";
+		updateTip();
 	}
 
 	@Override
@@ -36,6 +40,7 @@ public class RoundedRectangleShapeListener extends AbstractCreationListener {
 	public void mousePressed(MouseEvent e) {
 		/** currentStep -> 1 */
 		startFigure(e);
+		updateTip();
 	}
 
 	@Override
@@ -44,6 +49,7 @@ public class RoundedRectangleShapeListener extends AbstractCreationListener {
 		nextStep();
 		checkZeroSizeFigure();
 		drawingModel.update();
+		updateTip();
 	}
 
 	@Override

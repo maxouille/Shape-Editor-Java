@@ -264,7 +264,9 @@ public class Drawing extends Observable implements Iterable<AbstractFigure>
 	 */
 	public void removeLastFigure()
 	{
-		figures.remove(figures.size()-1);
+		if (figures.size() != 0) {
+			figures.remove(figures.size()-1);
+		}
 	}
 
 	/**

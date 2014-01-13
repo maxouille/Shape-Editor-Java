@@ -395,7 +395,7 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 		 * defaultCoordString dans le label
 		 */
 		if (sendInfoState) {
-			this.coordLabel.setText("x: " + coordFormat.format(p.x) + "; y: "
+			this.coordLabel.setText("x: " + coordFormat.format(p.x) + " y: "
 					+ coordFormat.format(p.y));
 		} else {
 			this.coordLabel.setText(defaultCoordString);

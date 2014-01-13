@@ -36,8 +36,8 @@ public class RoundedRectangle extends AbstractFigure {
 	
 	public void setArc(Point2D p) { 
 		RoundRectangle2D.Double rect = (RoundRectangle2D.Double) shape;
-		Double new_x = p.getX();
-		Double new_y = p.getY();
+		double new_x = p.getX();
+		double new_y = p.getY();
 		if (new_x > x+w && new_y > y+h) {
 			rect.archeight = new_y - (y+h); 
 		}

@@ -54,6 +54,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JScrollPane;
 
 import java.awt.event.ActionListener;
+import java.awt.FlowLayout;
 
 /**
  * Fenêtre principale de l'application
@@ -251,6 +252,7 @@ public class EditorFrame extends JFrame
 		drawingModel = new Drawing();
 		InfoPanel infoPanel = new InfoPanel();
 		drawingPanel = new DrawingPanel(drawingModel, coordLabel , infoPanel);
+		drawingPanel.setPreferredSize(new Dimension(700, 600));
 		setResizable(false);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -308,23 +310,24 @@ public class EditorFrame extends JFrame
 		panel.add(verticalBox);
 		
 		labeledComboBox = new JLabeledComboBox("Shape", FigureType.stringValues()
-				       							, 2, (ItemListener) null);
-		labeledComboBox.addItemListener(new ShapeItemListener(FigureType.fromInteger(2)));
+				       							, 2, new ShapeItemListener(FigureType.fromInteger(2)));
 		labeledComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox);
 		
-		JLabeledComboBox labeledComboBox_1 = new JLabeledComboBox("Fill Color", fillColorNames, 0, (ItemListener) null);
-		labeledComboBox_1.addItemListener(new ColorItemListener(edgePaints, defaultFillColorIndex, specialFillColorIndex, PaintToType.FILL));
+		JLabeledComboBox labeledComboBox_1 = 
+				new JLabeledComboBox("Fill Color", fillColorNames, 0, 
+						new ColorItemListener(edgePaints, defaultFillColorIndex, specialFillColorIndex, PaintToType.FILL));
 		labeledComboBox_1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox_1);
 		
-		JLabeledComboBox labeledComboBox_2 = new JLabeledComboBox("Edge Color", edgeColorNames, 0, (ItemListener) null);
-		labeledComboBox_2.addItemListener(new ColorItemListener(edgePaints, defaultEdgeColorIndex, specialEdgeColorIndex, PaintToType.EDGE));
+		JLabeledComboBox labeledComboBox_2 = 
+				new JLabeledComboBox("Edge Color", edgeColorNames, 0, 
+						new ColorItemListener(edgePaints, defaultEdgeColorIndex, specialEdgeColorIndex, PaintToType.EDGE));
 		labeledComboBox_2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox_2);
 		
-		JLabeledComboBox labeledComboBox_3 = new JLabeledComboBox("Line Type", LineType.stringValues() , 0, (ItemListener) null);
-		labeledComboBox_3.addItemListener(new EdgeTypeListener(LineType.fromInteger(0)));
+		JLabeledComboBox labeledComboBox_3 = new JLabeledComboBox("Line Type", LineType.stringValues() , 0, 
+				new EdgeTypeListener(LineType.fromInteger(0)));
 		labeledComboBox_3.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox_3);
 		
@@ -338,21 +341,25 @@ public class EditorFrame extends JFrame
 		JSpinner spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(4, 1, 30, 1));
 		panel_2.add(spinner);
-		spinner.setName("");
 		spinner.addChangeListener(new EdgeWidthListener(defaultEdgeWidth));		
 		
 		infoPanel.setPreferredSize(new Dimension(170, 130));
 		verticalBox.add(infoPanel);
 		
 		JPanel panel_1 = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
 		getContentPane().add(panel_1, BorderLayout.SOUTH);
-		
+		tipLabel.setHorizontalTextPosition(SwingConstants.LEFT);
 		tipLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_1.add(tipLabel);
 		
 		Component horizontalGlue_1 = Box.createHorizontalGlue();
-		horizontalGlue_1.setPreferredSize(new Dimension(600, 10));
+		horizontalGlue_1.setPreferredSize(new Dimension(530, 10));
 		panel_1.add(horizontalGlue_1);
+		coordLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+		coordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		coordLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		panel_1.add(coordLabel);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -360,6 +367,7 @@ public class EditorFrame extends JFrame
 		
 		drawingPanel.setInfoPanel(infoPanel);
 		scrollPane.setViewportView(drawingPanel);
+		drawingPanel.setLayout(new BorderLayout(0, 0));
 		/*
 		 * Construire l'interface graphique en utilisant WindowBuilder:
 		 * Menu Contextuel -> Open With -> WindowBuilder Editor puis
@@ -898,7 +906,7 @@ public class EditorFrame extends JFrame
 			/*
 			 * Mise en place de l'épaisseur de trait dans drawingModel
 			 */
-			drawingModel.setEdgeWidth((float) initialValue);
+			drawingModel.setEdgeWidth(initialValue);
 		}
 
 		/**
@@ -915,8 +923,7 @@ public class EditorFrame extends JFrame
 			/*
 			 * Mise en place de l'épaisseur de trait dans drawingModel
 			 */
-			float res  = (float) spinnerModel.getValue();
-			System.out.println("res = "+res);
+			int res  = (int) spinnerModel.getValue();
 			drawingModel.setEdgeWidth(res);
 		}
 	}
