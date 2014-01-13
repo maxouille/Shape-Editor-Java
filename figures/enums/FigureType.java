@@ -1,10 +1,8 @@
 package figures.enums;
 
 import java.awt.BasicStroke;
-import java.awt.List;
 import java.awt.Paint;
 import java.awt.geom.Point2D;
-
 
 import javax.swing.JLabel;
 
@@ -16,6 +14,9 @@ import figures.Polygon;
 import figures.Rectangle;
 import figures.RoundedRectangle;
 import figures.creationListeners.AbstractCreationListener;
+import figures.creationListeners.PolygonShapeListener;
+import figures.creationListeners.RoundedRectangleShapeListener;
+import figures.creationListeners.ShapeListener;
 
 /**
  * Enumeration des différentes figures possibles
@@ -58,7 +59,7 @@ public enum FigureType
 			case ROUNDED_RECTANGLE:
 				return new RoundedRectangle(stroke, edge, fill, p.getX(), p.getY(), 0.0, 0.0);
 			case POLYGON:
-				return new Polygon(stroke, edge, fill);
+				return new Polygon(stroke, edge, fill, p);
 		}
 
 		throw new AssertionError("FigureType unknown assertion: " + this);
@@ -81,23 +82,11 @@ public enum FigureType
 			case CIRCLE:
 			case ELLIPSE:
 			case RECTANGLE:
-				/*
-				 * TODO remplacer par return new
-				 * RectShapeCreationListener(model, tipLabel)
-				 */
-				return null;
+				return new ShapeListener(model, tipLabel, 2);
 			case ROUNDED_RECTANGLE:
-				/*
-				 * TODO remplacer par return new
-				 * RoundRectShapeCreationListener(model, tipLabel)
-				 */
-				return null;
+				return new RoundedRectangleShapeListener(model, tipLabel, 3);
 			case POLYGON:
-				/*
-				 * TODO remplacer par return new PolygonCreationListener(model,
-				 * tipLabel)
-				 */
-				return null;
+				return new PolygonShapeListener(model, tipLabel, 1000);
 		}
 
 		throw new AssertionError("FigureType unknown assertion: " + this);

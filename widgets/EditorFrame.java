@@ -62,6 +62,11 @@ import java.awt.event.ActionListener;
 public class EditorFrame extends JFrame
 {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Le modèle de dessin sous-jacent;
 	 */
 	protected Drawing drawingModel;
@@ -84,7 +89,7 @@ public class EditorFrame extends JFrame
 	 * Le label dans la barre d'état en bas dans lequel on affiche les
 	 * conseils utilisateur pour créer une figure
 	 */
-	protected JLabel tipLabel;
+	protected JLabel tipLabel = new JLabel("tipLabel");
 
 	/**
 	 * L'index de l'élément sélectionné par défaut le type de figure
@@ -243,6 +248,9 @@ public class EditorFrame extends JFrame
 	 */
 	public EditorFrame() throws HeadlessException
 	{
+		drawingModel = new Drawing();
+		InfoPanel infoPanel = new InfoPanel();
+		drawingPanel = new DrawingPanel(drawingModel, coordLabel , infoPanel);
 		setResizable(false);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -300,26 +308,30 @@ public class EditorFrame extends JFrame
 		panel.add(verticalBox);
 		
 		labeledComboBox = new JLabeledComboBox("Shape", FigureType.stringValues()
-				       							, 0, (ItemListener) null);
+				       							, 2, (ItemListener) null);
+		labeledComboBox.addItemListener(new ShapeItemListener(FigureType.fromInteger(2)));
 		labeledComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox);
 		
-		JLabeledComboBox labeledComboBox_1 = new JLabeledComboBox("FillColor", fillColorNames, 0, (ItemListener) null);
+		JLabeledComboBox labeledComboBox_1 = new JLabeledComboBox("Fill Color", fillColorNames, 0, (ItemListener) null);
+		labeledComboBox_1.addItemListener(new ColorItemListener(edgePaints, defaultFillColorIndex, specialFillColorIndex, PaintToType.FILL));
 		labeledComboBox_1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox_1);
 		
 		JLabeledComboBox labeledComboBox_2 = new JLabeledComboBox("Edge Color", edgeColorNames, 0, (ItemListener) null);
+		labeledComboBox_2.addItemListener(new ColorItemListener(edgePaints, defaultEdgeColorIndex, specialEdgeColorIndex, PaintToType.EDGE));
 		labeledComboBox_2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox_2);
 		
 		JLabeledComboBox labeledComboBox_3 = new JLabeledComboBox("Line Type", LineType.stringValues() , 0, (ItemListener) null);
+		labeledComboBox_3.addItemListener(new EdgeTypeListener(LineType.fromInteger(0)));
 		labeledComboBox_3.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox_3);
 		
 		JPanel panel_2 = new JPanel();
 		verticalBox.add(panel_2);
 		
-		JLabel lblNewLabel_2 = new JLabel("Width");
+		JLabel lblNewLabel_2 = new JLabel("Width ");
 		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel_2.add(lblNewLabel_2);
 		
@@ -327,15 +339,14 @@ public class EditorFrame extends JFrame
 		spinner.setModel(new SpinnerNumberModel(4, 1, 30, 1));
 		panel_2.add(spinner);
 		spinner.setName("");
+		spinner.addChangeListener(new EdgeWidthListener(defaultEdgeWidth));		
 		
-		InfoPanel infoPanel = new InfoPanel();
 		infoPanel.setPreferredSize(new Dimension(170, 130));
 		verticalBox.add(infoPanel);
 		
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.SOUTH);
 		
-		tipLabel = new JLabel("tipLabel");
 		tipLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_1.add(tipLabel);
 		
@@ -347,7 +358,7 @@ public class EditorFrame extends JFrame
 		JScrollPane scrollPane = new JScrollPane();
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
-		drawingPanel = new DrawingPanel(drawingModel, coordLabel , infoPanel);
+		drawingPanel.setInfoPanel(infoPanel);
 		scrollPane.setViewportView(drawingPanel);
 		/*
 		 * Construire l'interface graphique en utilisant WindowBuilder:
@@ -437,13 +448,13 @@ public class EditorFrame extends JFrame
 
 		// --------------------------------------------------------------------
 		// Ajout des contrôleurs aux widgets
-		// TODO pour connaître les Listeners applicable à un widget
+		// pour connaître les Listeners applicable à un widget
 		// dans WindowBuilder, sélectionnez un widger de l'UI puis Menu
 		// Conextuel -> Add event handler
 		// --------------------------------------------------------------------
 
 		/*
-		 * TODO ajoutez les Listeners adéquats aux différents widgets créés ci-
+		 * ajoutez les Listeners adéquats aux différents widgets créés ci-
 		 * dessus
 		 * 	- figureTypeComboBox : ajoutez un ShapeItemListener
 		 * 	- fillPaintComboBox : ajoutez un ColorItemListener(... PaintToType.FILL)
@@ -905,6 +916,7 @@ public class EditorFrame extends JFrame
 			 * Mise en place de l'épaisseur de trait dans drawingModel
 			 */
 			float res  = (float) spinnerModel.getValue();
+			System.out.println("res = "+res);
 			drawingModel.setEdgeWidth(res);
 		}
 	}

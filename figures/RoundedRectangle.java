@@ -3,7 +3,7 @@ package figures;
 import java.awt.BasicStroke;
 import java.awt.Paint;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 
 public class RoundedRectangle extends AbstractFigure {
 	
@@ -19,7 +19,7 @@ public class RoundedRectangle extends AbstractFigure {
 	 */
 	public RoundedRectangle(BasicStroke stroke, Paint edge, Paint fill, Double x, Double y, Double w, Double h) {
 		super(stroke, edge, fill);
-		shape = new Rectangle2D.Double(x, y, w, h);
+		shape = new RoundRectangle2D.Double(x, y, w, h, 0, 0);
 	}
 	
 	@Override
@@ -33,5 +33,16 @@ public class RoundedRectangle extends AbstractFigure {
 	public Point2D getCenter() {
 		return new Point2D.Double((x+w)/2, (y-h)/2);
 	}
-
+	
+	public void setArc(Point2D p) { 
+		RoundRectangle2D.Double rect = (RoundRectangle2D.Double) shape;
+		Double new_x = p.getX();
+		Double new_y = p.getY();
+		if (new_x > x+w && new_y > y+h) {
+			rect.archeight = new_y - (y+h); 
+		}
+		if (new_x < x+w && new_y < y+h) {
+			rect.arcwidth = x+w - new_x;
+		}
+	}
 }

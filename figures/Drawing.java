@@ -220,7 +220,6 @@ public class Drawing extends Observable implements Iterable<AbstractFigure>
 		
 		AbstractFigure f = type.getFigure(stroke, edgePaint, fillPaint, p);
 
-
 		/*
 		 * Ajout de la figure à #figures si !null et MAJ
 		 */
@@ -230,7 +229,7 @@ public class Drawing extends Observable implements Iterable<AbstractFigure>
 		else {
 			System.out.println("null figure");
 		}
-		return null; // <-- Celui qui laisse ça est un abruti!
+		return f; 
 	}
 
 	/**
@@ -293,6 +292,6 @@ public class Drawing extends Observable implements Iterable<AbstractFigure>
 	 */
 	public ListIterator<AbstractFigure> reverseIterator()
 	{
-		return figures.listIterator(figures.size()-1);
+		return figures.listIterator(figures.size());
 	}
 }

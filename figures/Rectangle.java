@@ -26,7 +26,6 @@ public class Rectangle extends AbstractFigure {
 	public void setLastPoint(Point2D p) {
 		w = Math.abs(p.getX() - x);
 		h = Math.abs(p.getY() - y);
-
 	}
 
 	@Override

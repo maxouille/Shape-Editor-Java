@@ -2,48 +2,58 @@ package figures.creationListeners;
 
 import java.awt.event.MouseEvent;
 
+import javax.swing.JLabel;
+
+import figures.Drawing;
+
 public class PolygonShapeListener extends AbstractCreationListener {
+
+	/**
+	 * @param model
+	 * @param infoLabel
+	 * @param nbSteps
+	 */
+	public PolygonShapeListener(Drawing model, JLabel infoLabel, int nbSteps) {
+		super(model, infoLabel, nbSteps);
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		startFigure(e);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			endPoint = e.getPoint();
+			nextStep();
+			checkZeroSizeFigure();
+			drawingModel.update();
+		}
+		if (e.getButton() == MouseEvent.BUTTON3) {
+			endFigure(e);
+		}
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		//currentFigure.setLastPoint(e.getPoint());
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

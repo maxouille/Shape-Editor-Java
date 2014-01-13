@@ -143,7 +143,6 @@ public abstract class AbstractCreationListener implements MouseListener,
 	{
 		startPoint = e.getPoint();
 		currentFigure = drawingModel.initiateFigure(startPoint);
-
 		nextStep();
 
 		drawingModel.update();
