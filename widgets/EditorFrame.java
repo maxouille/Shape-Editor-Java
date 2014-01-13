@@ -233,7 +233,7 @@ public class EditorFrame extends JFrame
 	 */
 	private final Action aboutAction = new AboutAction();
 	private JLabeledComboBox labeledComboBox;
-	private final JLabel lblNewLabel = new JLabel("coordLabel");
+	private final JLabel coordLabel = new JLabel("coordLabel");
 
 	/**
 	 * Constructeur de la fenètre de l'éditeur.
@@ -252,26 +252,14 @@ public class EditorFrame extends JFrame
 		menuBar.add(mnNewMenu);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Undo");
-		mntmNewMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent undoActionEvent) {
-			}
-		});
 		mntmNewMenuItem.setAction(undoAction);
 		mnNewMenu.add(mntmNewMenuItem);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Clear");
-		mntmNewMenuItem_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent cleaActionEvent) {
-			}
-		});
 		mntmNewMenuItem_1.setAction(clearAction);
 		mnNewMenu.add(mntmNewMenuItem_1);
 		
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Quit");
-		mntmNewMenuItem_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent quiActionEvent) {
-			}
-		});
 		mntmNewMenuItem_2.setAction(quitAction);
 		mnNewMenu.add(mntmNewMenuItem_2);
 		
@@ -279,10 +267,6 @@ public class EditorFrame extends JFrame
 		menuBar.add(mnNewMenu_1);
 		
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("About");
-		mntmNewMenuItem_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent aboutActionEvent) {
-			}
-		});
 		mntmNewMenuItem_3.setAction(aboutAction);
 		mnNewMenu_1.add(mntmNewMenuItem_3);
 		getContentPane().setLayout(new BorderLayout(0, 0));
@@ -291,26 +275,14 @@ public class EditorFrame extends JFrame
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 		
 		JButton btnNewButton = new JButton("Undo");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent undoActionEvent) {
-			}
-		});
 		btnNewButton.setAction(undoAction);
 		toolBar.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Clear");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent clearActionEvent) {
-			}
-		});
 		btnNewButton_1.setAction(clearAction);
 		toolBar.add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("About");
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent aboutActionEvent) {
-			}
-		});
 		btnNewButton_2.setAction(aboutAction);
 		toolBar.add(btnNewButton_2);
 		
@@ -318,10 +290,6 @@ public class EditorFrame extends JFrame
 		toolBar.add(horizontalGlue);
 		
 		JButton btnNewButton_3 = new JButton("Quit");
-		btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent quitActionEvent) {
-			}
-		});
 		btnNewButton_3.setAction(quitAction);
 		toolBar.add(btnNewButton_3);
 		
@@ -331,9 +299,8 @@ public class EditorFrame extends JFrame
 		Box verticalBox = Box.createVerticalBox();
 		panel.add(verticalBox);
 		
-		labeledComboBox = new JLabeledComboBox("Shape", 
-				       							new String[] {"Circle", "Ellipse", "Rectangle", "Rounded Rectangle", "Polygon"},
-												0, (ItemListener) null);
+		labeledComboBox = new JLabeledComboBox("Shape", FigureType.stringValues()
+				       							, 0, (ItemListener) null);
 		labeledComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox);
 		
@@ -357,7 +324,7 @@ public class EditorFrame extends JFrame
 		panel_2.add(lblNewLabel_2);
 		
 		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(defaultEdgeWidth, minEdgeWidth, maxEdgeWidth, stepEdgeWidth));
+		spinner.setModel(new SpinnerNumberModel(4, 1, 30, 1));
 		panel_2.add(spinner);
 		spinner.setName("");
 		
@@ -368,20 +335,20 @@ public class EditorFrame extends JFrame
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.SOUTH);
 		
-		JLabel lblNewLabel_1 = new JLabel("tipLabel");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.LEFT);
-		panel_1.add(lblNewLabel_1);
+		tipLabel = new JLabel("tipLabel");
+		tipLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		panel_1.add(tipLabel);
 		
 		Component horizontalGlue_1 = Box.createHorizontalGlue();
 		horizontalGlue_1.setPreferredSize(new Dimension(600, 10));
 		panel_1.add(horizontalGlue_1);
-		panel_1.add(lblNewLabel);
+		panel_1.add(coordLabel);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
-		DrawingPanel drawingPanel_1 = new DrawingPanel((Drawing) null, (JLabel) null, (InfoPanel) null);
-		scrollPane.setViewportView(drawingPanel_1);
+		drawingPanel = new DrawingPanel(drawingModel, coordLabel , infoPanel);
+		scrollPane.setViewportView(drawingPanel);
 		/*
 		 * Construire l'interface graphique en utilisant WindowBuilder:
 		 * Menu Contextuel -> Open With -> WindowBuilder Editor puis
@@ -389,7 +356,7 @@ public class EditorFrame extends JFrame
 		 */
 
 		/*
-		 * TODO n'oubliez pas d'instancier vos attributs
+		 * n'oubliez pas d'instancier vos attributs
 		 */
 
 		/*
@@ -730,9 +697,11 @@ public class EditorFrame extends JFrame
 					drawingModel.setType(figureType);
 
 					/*
-					 * TODO Mise en place d'un nouveau type de creationListener
+					 * Mise en place d'un nouveau type de creationListener
 					 * dans drawingPanel après avoir enlevé l'ancien
 					 */
+					drawingPanel.removeCreationListener(creationListener);
+					drawingPanel.addCreationListener(creationListener);
 					break;
 			}
 		}
@@ -892,9 +861,11 @@ public class EditorFrame extends JFrame
 			if (e.getStateChange() == ItemEvent.SELECTED)
 			{
 				/*
-				 * TODO Mise en place du LineType correspondant à l'index
+				 * Mise en place du LineType correspondant à l'index
 				 * dans drawingModel
 				 */
+				edgeType = LineType.fromInteger(index);
+				drawingModel.setEdgeType(edgeType);
 			}
 		}
 	}
@@ -931,8 +902,10 @@ public class EditorFrame extends JFrame
 					(SpinnerNumberModel) spinner.getModel();
 
 			/*
-			 * TODO Mise en place de l'épaisseur de trait dans drawingModel
+			 * Mise en place de l'épaisseur de trait dans drawingModel
 			 */
+			float res  = (float) spinnerModel.getValue();
+			drawingModel.setEdgeWidth(res);
 		}
 	}
 }

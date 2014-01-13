@@ -3,36 +3,17 @@ package figures;
 import java.awt.BasicStroke;
 import java.awt.Paint;
 import java.awt.geom.Point2D;
-import java.util.List;
 
 public class Polygon extends AbstractFigure {
-	
-	
-	private List<Point2D> l;
 	
 	/**
 	 * @param stroke
 	 * @param edge
 	 * @param fill
-	 * @param l
 	 */
-	public Polygon(BasicStroke stroke, Paint edge, Paint fill, List<Point2D> l) {
+	public Polygon(BasicStroke stroke, Paint edge, Paint fill) {
 		super(stroke, edge, fill);
-		this.l = l;
-	}
-
-	/**
-	 * @return the l
-	 */
-	public List<Point2D> getL() {
-		return l;
-	}
-
-	/**
-	 * @param l the l to set
-	 */
-	public void setL(List<Point2D> l) {
-		this.l = l;
+		/*shape = new Pol;*/
 	}
 
 	@Override

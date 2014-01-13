@@ -1,8 +1,10 @@
 package figures.enums;
 
 import java.awt.BasicStroke;
+import java.awt.List;
 import java.awt.Paint;
 import java.awt.geom.Point2D;
+
 
 import javax.swing.JLabel;
 
@@ -10,6 +12,7 @@ import figures.AbstractFigure;
 import figures.Circle;
 import figures.Drawing;
 import figures.Ellipse;
+import figures.Polygon;
 import figures.Rectangle;
 import figures.RoundedRectangle;
 import figures.creationListeners.AbstractCreationListener;
@@ -45,15 +48,17 @@ public enum FigureType
 		switch (this)
 		{
 			case CIRCLE:
-				return new Circle(stroke, edge, fill, , p);
+				/** Créé un cercle de rayon null */
+				return new Circle(stroke, edge, fill, 0.0, p);
 			case ELLIPSE:
-				return new Ellipse(stroke, edge, fill, p, w, h);
+				/** Créé éllipse de demi grand et petit axe null */
+				return new Ellipse(stroke, edge, fill, p, 0, 0);
 			case RECTANGLE:
-				return new Rectangle(stroke, edge, fill, p, y);
+				return new Rectangle(stroke, edge, fill, p.getX(), p.getY(), 0.0, 0.0);
 			case ROUNDED_RECTANGLE:
-				return new RoundedRectangle(stroke, edge, fill, x, y);
+				return new RoundedRectangle(stroke, edge, fill, p.getX(), p.getY(), 0.0, 0.0);
 			case POLYGON:
-				return ;
+				return new Polygon(stroke, edge, fill);
 		}
 
 		throw new AssertionError("FigureType unknown assertion: " + this);
@@ -76,7 +81,6 @@ public enum FigureType
 			case CIRCLE:
 			case ELLIPSE:
 			case RECTANGLE:
-				return new RectS
 				/*
 				 * TODO remplacer par return new
 				 * RectShapeCreationListener(model, tipLabel)

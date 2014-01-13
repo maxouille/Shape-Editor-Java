@@ -2,12 +2,13 @@ package figures;
 
 import java.awt.BasicStroke;
 import java.awt.Paint;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
 public class Circle extends AbstractFigure {
 
-	private int radius;
-	private Point2D center;
+	private Double h;
+	private Point2D upper_left;
 	
 	
 	/**
@@ -17,43 +18,21 @@ public class Circle extends AbstractFigure {
 	 * @param radius
 	 * @param center
 	 */
-	public Circle(BasicStroke stroke, Paint edge, Paint fill, int radius,
-			Point2D center) {
+	public Circle(BasicStroke stroke, Paint edge, Paint fill, Double h,
+			Point2D upper_left) {
 		super(stroke, edge, fill);
-		this.radius = radius;
-		this.center = center;
-	}
-
-	/**
-	 * @return the radius
-	 */
-	public int getRadius() {
-		return radius;
-	}
-
-	/**
-	 * @param radius the radius to set
-	 */
-	public void setRadius(int radius) {
-		this.radius = radius;
-	}
-
-	/**
-	 * @param center the center to set
-	 */
-	public void setCenter(Point2D center) {
-		this.center = center;
+		shape = new Ellipse2D.Double(upper_left.getX(), upper_left.getY(), h, h);
 	}
 
 	@Override
 	public void setLastPoint(Point2D p) {
-		// TODO Auto-generated method stub
+		h = Math.abs(p.getX() - upper_left.getX());
 
 	}
 
 	@Override
 	public Point2D getCenter() {
-		return center;
+		return new Point2D.Double(upper_left.getX()+(h/2), upper_left.getY()-(h/2));
 	}
 
 }
