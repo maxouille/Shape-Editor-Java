@@ -21,13 +21,16 @@ public class Circle extends AbstractFigure {
 	public Circle(BasicStroke stroke, Paint edge, Paint fill, Double h,
 			Point2D upper_left) {
 		super(stroke, edge, fill);
+		this.upper_left = upper_left;
+		this.h = h;
+		instanceNumber++;
 		shape = new Ellipse2D.Double(upper_left.getX(), upper_left.getY(), h, h);
 	}
 
 	@Override
 	public void setLastPoint(Point2D p) {
 		h = Math.abs(p.getX() - upper_left.getX());
-
+		shape = new Ellipse2D.Double(upper_left.getX(), upper_left.getY(), h,h);
 	}
 
 	@Override

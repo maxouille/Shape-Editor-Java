@@ -417,11 +417,13 @@ public class DrawingPanel extends JPanel implements Observer, MouseListener,
 		 * remplissage de l'infoPanel avec les infos en provenance de la figure
 		 * sous le point p (s'il y en a une) si senInfoState est vrai
 		 */
-		for (ListIterator<AbstractFigure> it = drawingModel.reverseIterator(); it.hasPrevious();) {
-			AbstractFigure f = it.previous();
-			if (f.contains(p)) {
-				infoPanel.updateLabels(f.getName(), f.getBounds2D(),f.getCenter());
-				break;
+		if (sendInfoState){
+			AbstractFigure f = drawingModel.getFigureAt(p);
+			if ( f != null) {
+				infoPanel.updateLabels(f.getName(), f.getBounds2D(), f.getCenter());
+			}
+			else {
+				infoPanel.resetLabels();
 			}
 		}
 	}

@@ -5,44 +5,52 @@ import java.awt.Paint;
 import java.awt.geom.Point2D;
 import java.awt.geom.RoundRectangle2D;
 
-public class RoundedRectangle extends AbstractFigure {
-	
-	private Double x;
-	private Double y;
-	private Double w;
-	private Double h;
-	
+public class RoundedRectangle extends Rectangle {
 	/**
 	 * @param stroke
 	 * @param edge
 	 * @param fill
+	 * @param premierPoint
 	 */
-	public RoundedRectangle(BasicStroke stroke, Paint edge, Paint fill, Double x, Double y, Double w, Double h) {
-		super(stroke, edge, fill);
-		shape = new RoundRectangle2D.Double(x, y, w, h, 0, 0);
+	int etat;
+	double arcWidth;
+	double arcHeight;
+	
+	
+	public RoundedRectangle(BasicStroke stroke, Paint edge, Paint fill,
+			Point2D premierPoint) {
+		super(stroke, edge, fill, premierPoint.getX(), premierPoint.getY());
+		etat=0;
+		arcWidth=0;
+		arcHeight=0;
 	}
 	
 	@Override
 	public void setLastPoint(Point2D p) {
-		w = Math.abs(p.getX() - x);
-		h = Math.abs(p.getY() - y);
-
-	}
-
-	@Override
-	public Point2D getCenter() {
-		return new Point2D.Double((x+w)/2, (y-h)/2);
-	}
-	
-	public void setArc(Point2D p) { 
-		RoundRectangle2D.Double rect = (RoundRectangle2D.Double) shape;
-		double new_x = p.getX();
-		double new_y = p.getY();
-		if (new_x > x+w && new_y > y+h) {
-			rect.archeight = new_y - (y+h); 
+		Point2D firstPoint = new Point2D.Double(x, y);
+		Point2D secondPoint = new Point2D.Double(x+w, y+h);
+		if(etat==0){
+			if(! p.equals(secondPoint)){
+				super.setLastPoint(p);
+			}else{
+				etat=1;
+			}
+		}else{
+			arcWidth=Math.abs(p.getX()-secondPoint.getX());
+			arcHeight=Math.abs(p.getY()-secondPoint.getY());
+			double x = firstPoint.getX();
+			double y = firstPoint.getY();
+			double w = secondPoint.getX()-x;
+			double h = secondPoint.getY()-y;
+			if(w<0){
+				x = x + w;
+				w = Math.abs(w);
+			}
+			if(h<0){
+				y = y + h;
+				h = Math.abs(h);
+			}
+			shape = new RoundRectangle2D.Double(x, y, w, h, arcWidth, arcHeight);
 		}
-		if (new_x < x+w && new_y < y+h) {
-			rect.arcwidth = x+w - new_x;
-		}
-	}
+	}	
 }

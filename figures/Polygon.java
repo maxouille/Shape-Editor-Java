@@ -6,40 +6,49 @@ import java.awt.geom.Point2D;
 
 public class Polygon extends AbstractFigure {
 	
-	/**
-	 * @param stroke
-	 * @param edge
-	 * @param fill
-	 */
-	public Polygon(BasicStroke stroke, Paint edge, Paint fill, Point2D p) {
+	protected int nbPoints;
+	protected int[] lx;
+	protected int[] ly;
+	
+	public Polygon(BasicStroke stroke, Paint edge, Paint fill,Point2D p) {
 		super(stroke, edge, fill);
-		int[] lx = new int[] {(int) p.getX(), (int) p.getX()};
-		int[] ly = new int[] {(int) p.getY(), (int) p.getY()};
+		lx = new int[30];
+		lx[0]=(int) p.getX();
+		ly = new int[30];
+		ly[0]=(int) p.getY();
+		nbPoints = 1;
 		shape = new java.awt.Polygon(lx, ly, 2);
 	}
 
 	@Override
 	public void setLastPoint(Point2D p) {
-		java.awt.Polygon poly = (java.awt.Polygon) shape;
-		int longueur = poly.xpoints.length;
-		poly.xpoints[longueur-1] = (int) p.getX();
-		poly.ypoints[longueur-1] = (int) p.getY();
+		int x = (int) p.getX();
+		int y = (int) p.getY();
+		if(nbPoints<2 || ((x!=lx[nbPoints])||(y!=ly[nbPoints-1]))){
+			if((x!=lx[nbPoints])||(y!=ly[nbPoints])){
+				lx[nbPoints]=x;
+				ly[nbPoints]=y;
+				shape= new java.awt.Polygon(lx, ly, nbPoints+1);
+			} else {
+				lx[nbPoints]=x;
+				ly[nbPoints]=y;
+				nbPoints=nbPoints+1;
+				shape= new java.awt.Polygon(lx, ly, nbPoints);
+			}
+		}
 	}
 
 	@Override
 	public Point2D getCenter() {
-		java.awt.Polygon poly = (java.awt.Polygon) shape;
-		int resx = 0;
-		for (int i = 0; i < poly.xpoints.length; i++) {
-			resx += poly.xpoints[i];
+		double x=0;
+		double y=0;
+		for(int i=0; i <= nbPoints;i++){
+			x=x+(double)lx[i];
+			y=y+(double)ly[i];
 		}
-		int resy = 0;
-		for (int i = 0; i < poly.ypoints.length; i++) {
-			resy += poly.ypoints[i];
-		}		
-		double resmeanx = resx/poly.xpoints.length;
-		double resmeany = resy/poly.ypoints.length;
-		return new Point2D.Double(resmeanx,  resmeany);
+		x=x/(nbPoints+1);
+		y=y/(nbPoints+1);
+		
+		return (new Point2D.Double(x,y));
 	}
-	
 }

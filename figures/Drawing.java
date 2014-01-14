@@ -209,9 +209,9 @@ public class Drawing extends Observable implements Iterable<AbstractFigure>
 		 * Maintenant que l'on s'apprête effectivement à créer une figure
 		 * on ajoute les Paints et le Stroke aux factories
 		 */
-		fillPaintFactory.get(fillPaint);
-		edgePaintFactory.get(edgePaint);
-		edgeTypeFactory.get(stroke);
+		fillPaint = fillPaintFactory.get(fillPaint);
+		edgePaint = edgePaintFactory.get(edgePaint);
+		stroke = edgeTypeFactory.get(stroke);
 
 		/*
 		 * Obtention de la figure correspondant au type de figure choisi
@@ -225,6 +225,7 @@ public class Drawing extends Observable implements Iterable<AbstractFigure>
 		 */
 		if (f != null) {
 			figures.add(f);
+			update();
 		}
 		else {
 			System.out.println("null figure");
@@ -264,7 +265,7 @@ public class Drawing extends Observable implements Iterable<AbstractFigure>
 	 */
 	public void removeLastFigure()
 	{
-		if (figures.size() != 0) {
+		if (!figures.isEmpty()) {
 			figures.remove(figures.size()-1);
 		}
 	}
@@ -274,7 +275,7 @@ public class Drawing extends Observable implements Iterable<AbstractFigure>
 	 */
 	public void clear()
 	{
-		figures.removeAllElements();
+		figures.clear();
 	}
 
 	/**

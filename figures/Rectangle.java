@@ -7,25 +7,30 @@ import java.awt.geom.Rectangle2D;
 
 public class Rectangle extends AbstractFigure {
 	
-	private Double x;
-	private Double y;
-	private Double w;
-	private Double h;
+	protected Double x;
+	protected Double y;
+	protected Double w;
+	protected Double h;
 	
 	/**
 	 * @param stroke
 	 * @param edge
 	 * @param fill
 	 */
-	public Rectangle(BasicStroke stroke, Paint edge, Paint fill, Double x, Double y, Double w, Double h) {
+	public Rectangle(BasicStroke stroke, Paint edge, Paint fill, Double x, Double y) {
 		super(stroke, edge, fill);
-		shape = new Rectangle2D.Double(x, y, w, h);
+		this.x = x;
+		this.y = y;
+		w = 0.0;
+		h = 0.0;
+		shape = new Rectangle2D.Double(x, y, 0,0);
 	}
 	
 	@Override
 	public void setLastPoint(Point2D p) {
 		w = Math.abs(p.getX() - x);
 		h = Math.abs(p.getY() - y);
+		shape = new Rectangle2D.Double(x,y,w,h);
 	}
 
 	@Override

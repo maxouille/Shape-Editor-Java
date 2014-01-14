@@ -14,8 +14,8 @@ public class ShapeListener extends AbstractCreationListener {
 		 */
 		public ShapeListener(Drawing model, JLabel infoLabel, int nbSteps) {
 			super(model, infoLabel, nbSteps);
-			tips[0] = "Bouton Gauche + drag pour commencer la figure";
-			tips[1] = "Relacher le bouton pour finir la figure";
+			tips[0] = "Bouton Gauche et tirez pour commencer la figure ";
+			tips[1] = "Relacher le bouton Gauche pour finir la figure       ";
 			updateTip();
 		}
 
@@ -33,13 +33,17 @@ public class ShapeListener extends AbstractCreationListener {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			startFigure(e);
-			updateTip();
+			if (currentStep==0) {
+				startFigure(e);
+				updateTip();
+			}
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			endFigure(e);
+			if (currentStep==1) {
+				endFigure(e);
+			}
 		}
 
 		@Override

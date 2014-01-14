@@ -24,6 +24,9 @@ public class Ellipse extends AbstractFigure {
 	public Ellipse(BasicStroke stroke, Paint edge, Paint fill,
 			Point2D upper_left, double w, double h) {
 		super(stroke, edge, fill);
+		this.upper_left = upper_left;
+		this.w = w;
+		this.h = h;
 		shape = new Ellipse2D.Double(upper_left.getX(), upper_left.getY(), w, h);
 	}
 
@@ -31,6 +34,7 @@ public class Ellipse extends AbstractFigure {
 	public void setLastPoint(Point2D p) {
 		w = Math.abs(p.getX() - upper_left.getX());
 		h = Math.abs(p.getY() - upper_left.getY());
+		shape = new Ellipse2D.Double(upper_left.getX(), upper_left.getY(), w, h);
 
 	}
 

@@ -90,7 +90,7 @@ public class EditorFrame extends JFrame
 	 * Le label dans la barre d'état en bas dans lequel on affiche les
 	 * conseils utilisateur pour créer une figure
 	 */
-	protected JLabel tipLabel = new JLabel("tipLabel");
+	protected JLabel tipLabel;
 
 	/**
 	 * L'index de l'élément sélectionné par défaut le type de figure
@@ -250,8 +250,13 @@ public class EditorFrame extends JFrame
 	public EditorFrame() throws HeadlessException
 	{
 		drawingModel = new Drawing();
+		tipLabel = new JLabel();
+		tipLabel.setText("Conseil de création de figure");
+		
 		InfoPanel infoPanel = new InfoPanel();
+		
 		drawingPanel = new DrawingPanel(drawingModel, coordLabel , infoPanel);
+		
 		drawingPanel.setPreferredSize(new Dimension(700, 600));
 		setResizable(false);
 		
@@ -310,7 +315,7 @@ public class EditorFrame extends JFrame
 		panel.add(verticalBox);
 		
 		labeledComboBox = new JLabeledComboBox("Shape", FigureType.stringValues()
-				       							, 2, new ShapeItemListener(FigureType.fromInteger(2)));
+				       							, 0, new ShapeItemListener(FigureType.fromInteger(0)));
 		labeledComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox);
 		
@@ -326,8 +331,8 @@ public class EditorFrame extends JFrame
 		labeledComboBox_2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox_2);
 		
-		JLabeledComboBox labeledComboBox_3 = new JLabeledComboBox("Line Type", LineType.stringValues() , 0, 
-				new EdgeTypeListener(LineType.fromInteger(0)));
+		JLabeledComboBox labeledComboBox_3 = new JLabeledComboBox("Line Type", LineType.stringValues() , 1, 
+				new EdgeTypeListener(LineType.fromInteger(1)));
 		labeledComboBox_3.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox_3);
 		
@@ -355,7 +360,7 @@ public class EditorFrame extends JFrame
 		panel_1.add(tipLabel);
 		
 		Component horizontalGlue_1 = Box.createHorizontalGlue();
-		horizontalGlue_1.setPreferredSize(new Dimension(530, 10));
+		horizontalGlue_1.setPreferredSize(new Dimension(550, 10));
 		panel_1.add(horizontalGlue_1);
 		coordLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
 		coordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -571,6 +576,7 @@ public class EditorFrame extends JFrame
 			 * retirer la dernière figure dessinée dans drawingModel
 			 */
 			drawingModel.removeLastFigure();
+			drawingPanel.repaint();
 		}
 	}
 
@@ -619,6 +625,7 @@ public class EditorFrame extends JFrame
 			 * Effacer toutes les figures du drawingModel
 			 */
 			drawingModel.clear();
+			drawingPanel.repaint();
 		}
 	}
 
@@ -720,6 +727,7 @@ public class EditorFrame extends JFrame
 					 * dans drawingPanel après avoir enlevé l'ancien
 					 */
 					drawingPanel.removeCreationListener(creationListener);
+					creationListener = figureType.getCreationListener(drawingModel, tipLabel);
 					drawingPanel.addCreationListener(creationListener);
 					break;
 			}
@@ -868,7 +876,8 @@ public class EditorFrame extends JFrame
 			/*
 			 * Mise en place du type de trait dans drawingModel
 			 */
-			drawingModel.setEdgeType(type);
+			edgeType = type;
+			drawingModel.setEdgeType(edgeType);
 		}
 
 		@Override

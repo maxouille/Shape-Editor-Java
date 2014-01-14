@@ -55,9 +55,9 @@ public enum FigureType
 				/** Créé éllipse de demi grand et petit axe null */
 				return new Ellipse(stroke, edge, fill, p, 0, 0);
 			case RECTANGLE:
-				return new Rectangle(stroke, edge, fill, p.getX(), p.getY(), 0.0, 0.0);
+				return new Rectangle(stroke, edge, fill, p.getX(), p.getY());
 			case ROUNDED_RECTANGLE:
-				return new RoundedRectangle(stroke, edge, fill, p.getX(), p.getY(), 0.0, 0.0);
+				return new RoundedRectangle(stroke, edge, fill, p);
 			case POLYGON:
 				return new Polygon(stroke, edge, fill, p);
 		}
@@ -86,7 +86,7 @@ public enum FigureType
 			case ROUNDED_RECTANGLE:
 				return new RoundedRectangleShapeListener(model, tipLabel, 3);
 			case POLYGON:
-				return new PolygonShapeListener(model, tipLabel, 1000);
+				return new PolygonShapeListener(model, tipLabel, 3);
 		}
 
 		throw new AssertionError("FigureType unknown assertion: " + this);
