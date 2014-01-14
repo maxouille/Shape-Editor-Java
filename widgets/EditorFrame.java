@@ -46,14 +46,8 @@ import javax.swing.Box;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import javax.swing.JScrollPane;
 
-import java.awt.event.ActionListener;
 import java.awt.FlowLayout;
 
 /**
@@ -315,7 +309,7 @@ public class EditorFrame extends JFrame
 		panel.add(verticalBox);
 		
 		labeledComboBox = new JLabeledComboBox("Shape", FigureType.stringValues()
-				       							, 0, new ShapeItemListener(FigureType.fromInteger(0)));
+				       							, defaultFigureTypeIndex, new ShapeItemListener(FigureType.fromInteger(defaultFigureTypeIndex)));
 		labeledComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox);
 		
@@ -331,8 +325,8 @@ public class EditorFrame extends JFrame
 		labeledComboBox_2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox_2);
 		
-		JLabeledComboBox labeledComboBox_3 = new JLabeledComboBox("Line Type", LineType.stringValues() , 1, 
-				new EdgeTypeListener(LineType.fromInteger(1)));
+		JLabeledComboBox labeledComboBox_3 = new JLabeledComboBox("Line Type", LineType.stringValues() , defaultEdgeTypeIndex, 
+				new EdgeTypeListener(LineType.fromInteger(defaultEdgeTypeIndex)));
 		labeledComboBox_3.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(labeledComboBox_3);
 		
@@ -344,7 +338,7 @@ public class EditorFrame extends JFrame
 		panel_2.add(lblNewLabel_2);
 		
 		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(4, 1, 30, 1));
+		spinner.setModel(new SpinnerNumberModel(defaultEdgeWidth, minEdgeWidth, maxEdgeWidth, stepEdgeWidth));
 		panel_2.add(spinner);
 		spinner.addChangeListener(new EdgeWidthListener(defaultEdgeWidth));		
 		
@@ -666,7 +660,7 @@ public class EditorFrame extends JFrame
 			 * Ouvrir un MessageDialog (JOptionPane.showMessageDialog(...)) de
 			 * type JOptionPane.INFORMATION_MESSAGE
 			 */
-			JOptionPane.showMessageDialog(null, "ABOUT", "ABOUT", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Projet d'ILO 2013-2014.\nRéalisé par Maxence Bobin et François Ho.", "Projet d'ILO 2013-2014.\n Réalisé par Maxence Bobin et François Ho.", JOptionPane.INFORMATION_MESSAGE);
 			
 		}
 	}
@@ -709,6 +703,7 @@ public class EditorFrame extends JFrame
 		@Override
 		public void itemStateChanged(ItemEvent e)
 		{
+			@SuppressWarnings("rawtypes")
 			JComboBox items = (JComboBox) e.getSource();
 			int index = items.getSelectedIndex();
 			int stateChange = e.getStateChange();
@@ -806,6 +801,7 @@ public class EditorFrame extends JFrame
 		@Override
 		public void itemStateChanged(ItemEvent e)
 		{
+			@SuppressWarnings("rawtypes")
 			JComboBox combo = (JComboBox) e.getSource();
 			int index = combo.getSelectedIndex();
 
@@ -883,6 +879,7 @@ public class EditorFrame extends JFrame
 		@Override
 		public void itemStateChanged(ItemEvent e)
 		{
+			@SuppressWarnings("rawtypes")
 			JComboBox items = (JComboBox) e.getSource();
 			int index = items.getSelectedIndex();
 

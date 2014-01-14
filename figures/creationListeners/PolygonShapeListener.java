@@ -37,7 +37,7 @@ public class PolygonShapeListener extends AbstractCreationListener {
 			currentFigure.setLastPoint(previousPoint);
 			lastCreate = previousPoint;
 			drawingModel.update();
-			this.nextStep();
+			nextStep();
 			break;
 		case 2:
 			if(arg0.getPoint().distance(lastCreate)<distanceMini){

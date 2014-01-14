@@ -60,6 +60,7 @@ public class JLabeledComboBox extends JPanel
 	 *            liste change
 	 * @see #createImageIcon(String)
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public JLabeledComboBox(String title, String[] captions, int selectedIndex,
 	        ItemListener listener)
 	{
@@ -156,8 +157,13 @@ public class JLabeledComboBox extends JPanel
 	/**
 	 * Renderer pour les Labels du combobox
 	 */
+	@SuppressWarnings("rawtypes")
 	protected class JLabelRenderer extends JLabel implements ListCellRenderer
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		/** fonte pour les items à problèmes */
 		private Font pbFont;
 

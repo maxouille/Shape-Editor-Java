@@ -21,8 +21,6 @@ import java.util.Observer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import java.util.ListIterator;
-
 import figures.AbstractFigure;
 import figures.Drawing;
 import figures.creationListeners.AbstractCreationListener;
